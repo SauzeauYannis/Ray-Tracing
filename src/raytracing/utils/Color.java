@@ -25,15 +25,28 @@ public class Color {
     }
 
     public byte getRed() {
-        return (byte) (this.r * 255);
+        return (byte) (this.r * 255.0f);
     }
 
     public byte getGreen() {
-        return (byte) (this.g * 255);
+        return (byte) (this.g * 255.0f);
     }
 
     public byte getBlue() {
-        return (byte) (this.b * 255);
+        return (byte) (this.b * 255.0f);
     }
+
+    public Color add(Color color) {
+        return new Color(Math.min(this.r + color.r, 255.0f), Math.min(this.g + color.g, 255.0f), Math.min(this.b + color.b, 255.0f));
+    }
+
+    public Color multiply(Color color) {
+        return new Color(this.r * color.r, this.g * color.g, this.b * color.b);
+    }
+
+    public Color multiply(double d) {
+        return new Color((float) (this.r * d), (float) (this.g * d), (float) (this.b * d));
+    }
+
 
 }

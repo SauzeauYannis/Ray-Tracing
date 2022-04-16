@@ -1,20 +1,38 @@
 package raytracing.object;
 
 import raytracing.utils.Color;
-import raytracing.utils.Vec3f;
+import raytracing.utils.Vec3;
 
 public abstract class IntersectableObject {
 
     private Color color;
+    private Color specularColor;
+    private double shininess;
 
-    public IntersectableObject(Color color) {
+    public IntersectableObject(Color color, Color specularColor, double shininess) {
         this.color = color;
+        this.specularColor = specularColor;
+        this.shininess = shininess;
     }
 
-    public abstract double getIntersection(Vec3f P, Vec3f v);
+    public abstract double getIntersection(Vec3 P, Vec3 v);
+
+    public abstract Vec3 getNormal(Vec3 I);
+
+    public Vec3 getIntersectionPoint(Vec3 P, Vec3 v, double lambdaI) {
+        return P.add(v.mul(lambdaI));
+    }
 
     public Color getColor() {
         return color;
+    }
+
+    public Color getSpecularColor() {
+        return specularColor;
+    }
+
+    public double getShininess() {
+        return shininess;
     }
 
 }

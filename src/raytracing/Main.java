@@ -3,24 +3,24 @@ package raytracing;
 import raytracing.scene.Scene;
 import raytracing.utils.Color;
 import raytracing.utils.JavaTga;
-import raytracing.utils.Vec3f;
+import raytracing.utils.Vec3;
 
 public class Main extends JavaTga {
 
     public static void main(String[] args) {
         String filename = "test.tga";
-        int w = 1024;
-        int h = 768;
-        float D = 0.25f;
+        int w = 1280;
+        int h = 720;
+        double D = 0.5D;
 
         try {
             filename = args[0];
             w = Integer.parseInt(args[1]);
             h = Integer.parseInt(args[2]);
-            D = Float.parseFloat(args[3]);
+            D = Double.parseDouble(args[3]);
         } catch (Exception e) {
             System.out.println("Usage: java Main <filename> <width> <height> <distance>");
-            System.out.println("Default values: java Main test.tga 1024 768 0.25");
+            System.out.println("Default values: java Main " + filename + " " + w + " " + h + " " + D);
             System.out.println("=======================================================");
         }
 
@@ -33,10 +33,10 @@ public class Main extends JavaTga {
                 int index = 3 * (row * w + col);
 
                 Color color = scene.findColor(
-                        new Vec3f(),
-                        new Vec3f(
-                                (col - w / 2.0f) / (float) w,
-                                (row - h / 2.0f) / (float) h,
+                        new Vec3(),
+                        new Vec3(
+                                ((double) col - (double) w / 2.0D) / (double) h,
+                                ((double) row - (double) h / 2.0D) / (double) h,
                                 -D));
 
                 buffer[index] = color.getBlue();
