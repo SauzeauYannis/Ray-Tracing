@@ -28,16 +28,18 @@ public class Main extends JavaTga {
 
         byte buffer[] = new byte[3 * w * h];
 
+        Vec3 P = new Vec3();
+
         for (int row = 0; row < h; row++) { // for each row of the image
             for (int col = 0; col < w; col++) { // for each column of the image
                 int index = 3 * (row * w + col);
 
-                Color color = scene.findColor(
-                        new Vec3(),
-                        new Vec3(
-                                ((double) col - (double) w / 2.0D) / (double) h,
-                                ((double) row - (double) h / 2.0D) / (double) h,
-                                -D));
+                Vec3 v = new Vec3(
+                        ((double) col - (double) w / 2.0D) / (double) h,
+                        ((double) row - (double) h / 2.0D) / (double) h,
+                        -D);
+
+                Color color = scene.findColor(P, v);
 
                 buffer[index] = color.getBlue();
                 buffer[index + 1] = color.getGreen();

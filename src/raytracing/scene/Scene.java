@@ -17,9 +17,9 @@ public class Scene {
     private static final Plane floor = new Plane(new Vec3(0.0D, 1.0D, 0.0D), 1.5D, Color.CYAN);
     private static final Plane ceiling = new Plane(new Vec3(0.0D, -1.0D, 0.0D), 1.5D, Color.MAGENTA);
 
-    private static final Sphere sphere = new Sphere(new Vec3(0.0D, 0.0D, -1.0D), 0.25D, Color.WHITE);
+    private static final Sphere sphere = new Sphere(new Vec3(0.0D, 0.0D, -1.0D), 0.25D, Color.RED);
 
-    private static final Light light = new Light(new Vec3(0.25D, 0.25D, 0.0D), Color.WHITE, Color.LIGHT_GRAY);
+    private static final Light light = new Light(new Vec3(0.25D, 0.25D, 0.25D), Color.WHITE, Color.LIGHT_GRAY);
 
     private ArrayList<IntersectableObject> objects;
     private ArrayList<Light> lights;
@@ -66,7 +66,6 @@ public class Scene {
                     Vec3 IS = light.getPosition().sub(I);
                     double lambdaObj = object.getIntersection(I, IS);
 
-                    lambdaObj -= 0.0000001D;
                     if (0.0D < lambdaObj && lambdaObj < 1.0D)
                         visible = false;
                 }
@@ -78,7 +77,10 @@ public class Scene {
                     lightDirection.normalize();
 
                     double weight = Math.max(nI.dotProduct(lightDirection), 0.0D);
-                    double shininess = Math.max(nI.dotProduct(v), 0.0D);
+                    //double shininess = Math.max(nI.dotProduct(I), 0.0D);
+                    Vec3 h = lightDirection.add(v);
+                    h.normalize();
+                    double shininess = Math.max(nI.dotProduct(h), 0.0D);
 
                     Color diffuse = light.getDiffuse().multiply(objectI.getColor()).multiply(weight);
                     Color specular = light.getSpecular().multiply(objectI.getSpecularColor()).multiply(Math.pow(shininess, objectI.getShininess()));

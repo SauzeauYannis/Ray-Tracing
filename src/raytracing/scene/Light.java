@@ -9,7 +9,7 @@ public class Light {
     private Color diffuse;
     private Color specular;
 
-    public static final Color AMBIENT_LIGHT = Color.LIGHT_GRAY;
+    public static final Color AMBIENT_LIGHT = Color.DARK_GRAY;
 
     public Light(Vec3 position, Color diffuse, Color specular) {
         this.position = position;

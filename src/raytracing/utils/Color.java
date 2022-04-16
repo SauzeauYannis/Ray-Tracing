@@ -5,6 +5,9 @@ public class Color {
     public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
     public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
     public static final Color RED = new Color(1.0f, 0.0f, 0.0f);
+    public static final Color LIGHT_RED = new Color(1.0f, 0.5f, 0.5f);
+    public static final Color LIGHT_GREEN = new Color(0.5f, 1.0f, 0.5f);
+    public static final Color LIGHT_BLUE = new Color(0.5f, 0.5f, 1.0f);
     public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
     public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
     public static final Color YELLOW = new Color(1.0f, 1.0f, 0.0f);
@@ -37,16 +40,30 @@ public class Color {
     }
 
     public Color add(Color color) {
-        return new Color(Math.min(this.r + color.r, 255.0f), Math.min(this.g + color.g, 255.0f), Math.min(this.b + color.b, 255.0f));
+        Color c = new Color(this.r + color.r, this.g + color.g, this.b + color.b);
+        c.controlMinMax();
+
+        return c;
     }
 
     public Color multiply(Color color) {
-        return new Color(this.r * color.r, this.g * color.g, this.b * color.b);
+        Color c = new Color(this.r * color.r, this.g * color.g, this.b * color.b);
+        c.controlMinMax();
+
+        return c;
     }
 
     public Color multiply(double d) {
-        return new Color((float) (this.r * d), (float) (this.g * d), (float) (this.b * d));
+        Color c = new Color(this.r * (float) d, this.g * (float) d, this.b * (float) d);
+        c.controlMinMax();
+
+        return c;
     }
 
+    private void controlMinMax() {
+        this.b = Math.min(Math.max(this.b, 0.0f), 1.0f);
+        this.g = Math.min(Math.max(this.g, 0.0f), 1.0f);
+        this.r = Math.min(Math.max(this.r, 0.0f), 1.0f);
+    }
 
 }

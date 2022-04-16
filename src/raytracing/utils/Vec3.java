@@ -2,9 +2,9 @@ package raytracing.utils;
 
 public class Vec3 {
 
-	public double x;
-	public double y;
-	public double z;
+	private double x;
+	private double y;
+	private double z;
 
 	public Vec3(final double x, final double y, final double z) {
 		this.x = x;
@@ -28,16 +28,12 @@ public class Vec3 {
 		return new Vec3(this.x * scale, this.y * scale, this.z * scale);
 	}
 
-	public Vec3 div(double dotProduct) {
-       return new Vec3(this.x / dotProduct, this.y / dotProduct, this.z / dotProduct);
-    }
-
 	public double dotProduct(Vec3 v) {
 		return this.x * v.x + this.y * v.y + this.z * v.z;
 	}
 
     public void normalize() {
-		double length = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		double length = Math.sqrt(this.dotProduct(this));
 		this.x /= length;
 		this.y /= length;
 		this.z /= length;

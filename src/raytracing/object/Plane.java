@@ -15,7 +15,7 @@ public class Plane extends IntersectableObject {
     }
 
     public Plane(Vec3 normal, double distance, Color color) {
-        this(normal, distance, color, Color.WHITE, 100.0D);
+        this(normal, distance, color, Color.WHITE, 10.0D);
     }
 
     @Override
@@ -24,10 +24,10 @@ public class Plane extends IntersectableObject {
 
         if (nDotv != 0.0D) {
             double nDotP = n.dotProduct(P); // n.P
-            double lambda = (-nDotP - d) / nDotv; // (-n.P - d) / n.v
+            double lambdaI = (-nDotP - d) / nDotv; // (-n.P - d) / n.v
 
-            if (lambda > 0.0D)
-                return lambda;
+            if (lambdaI > 0.0001D)
+                return lambdaI;
         }
 
         return -1.0D;
