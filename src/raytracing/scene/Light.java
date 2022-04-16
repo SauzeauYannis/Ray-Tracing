@@ -1,3 +1,8 @@
+package raytracing.scene;
+
+import raytracing.utils.Color;
+import raytracing.utils.Vec3f;
+
 public class Light {
 
     private Vec3f position;
@@ -12,8 +17,21 @@ public class Light {
         this.specular = specular;
     }
 
+    public Color getSpecular() {
+        return specular;
+    }
+
+    public Color getDiffuse() {
+        return diffuse;
+    }
+
+    public Color getAmbient() {
+        return ambient;
+    }
+
+
     public Vec3f getPosition() {
         return position;
     }
-    
+
 }

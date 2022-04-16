@@ -1,8 +1,20 @@
+package raytracing;
+
+import raytracing.scene.Scene;
+import raytracing.utils.Color;
+import raytracing.utils.JavaTga;
+import raytracing.utils.Vec3f;
+
 public class Main extends JavaTga {
 
     public static void main(String[] args) {
+        String filename = "test.tga";
+
+        if (args.length > 0)
+            filename = args[0];
+
         Scene scene = new Scene();
-        
+
         int w = 1024;
         int h = 768;
         float D = 0.25f;
@@ -13,13 +25,11 @@ public class Main extends JavaTga {
                 int index = 3 * (row * w + col);
 
                 Color color = scene.findColor(
-                    new Vec3f(),
-                    new Vec3f(
-                        (col - w / 2.0f) / (float) w,
-                        (row - h / 2.0f) / (float) h,
-                        -D
-                    )
-                );
+                        new Vec3f(),
+                        new Vec3f(
+                                (col - w / 2.0f) / (float) w,
+                                (row - h / 2.0f) / (float) h,
+                                -D));
 
                 buffer[index] = color.getBlue();
                 buffer[index + 1] = color.getGreen();
@@ -27,11 +37,10 @@ public class Main extends JavaTga {
             }
         }
         try {
-            saveTGA("test.tga",buffer,w,h);
-        }
-        catch(Exception e)
-        {
-            System.err.println("TGA file not created :"+e);
+            saveTGA(filename, buffer, w, h);
+            System.out.println("Saved image to " + filename);
+        } catch (Exception e) {
+            System.err.println("Image could not be saved.");
         }
     }
 

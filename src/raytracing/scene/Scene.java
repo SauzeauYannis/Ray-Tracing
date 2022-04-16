@@ -1,4 +1,12 @@
+package raytracing.scene;
+
 import java.util.ArrayList;
+
+import raytracing.object.IntersectableObject;
+import raytracing.object.Plane;
+import raytracing.object.Sphere;
+import raytracing.utils.Color;
+import raytracing.utils.Vec3f;
 
 public class Scene {
 
@@ -19,11 +27,10 @@ public class Scene {
         this.objects.add(new Sphere(new Vec3f(0.0f, 0.0f, -1.0f), 0.25f, Color.WHITE));
 
         this.lights.add(new Light(
-            new Vec3f(0.25f, 0.25f, 0.0f), 
-            new Color(0.2f, 0.2f, 0.2f), 
-            new Color(1.0f, 1.0f, 1.0f),
-            new Color(0.8f, 0.8f, 0.8f))
-        );
+                new Vec3f(0.25f, 0.25f, 0.0f),
+                new Color(0.2f, 0.2f, 0.2f),
+                new Color(1.0f, 1.0f, 1.0f),
+                new Color(0.8f, 0.8f, 0.8f)));
     }
 
     public Color findColor(Vec3f P, Vec3f v) {
@@ -50,18 +57,19 @@ public class Scene {
 
                 for (IntersectableObject object : this.objects) {
                     double lambda = object.getIntersection(
-                        new Vec3f(I), 
-                        new Vec3f(light.getPosition()).sub(I)
-                    );
+                            new Vec3f(I),
+                            new Vec3f(light.getPosition()).sub(I));
 
-                    if (0 < lambda - 0.0001f && lambda - 0.0001f < 1) visible = false;
+                    if (0 < lambda - 0.0001f && lambda - 0.0001f < 1)
+                        visible = false;
                 }
 
-                if (!visible) color = Color.BLACK;
+                if (!visible)
+                    color = Color.BLACK;
             }
         }
 
         return color;
     }
-    
+
 }

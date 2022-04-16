@@ -1,3 +1,5 @@
+package raytracing.utils;
+
 public class Color {
 
     public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
@@ -12,26 +14,26 @@ public class Color {
     public static final Color DARK_GRAY = new Color(0.25f, 0.25f, 0.25f);
     public static final Color LIGHT_GRAY = new Color(0.75f, 0.75f, 0.75f);
 
-    private float b;
-    private float g;
     private float r;
+    private float g;
+    private float b;
 
     public Color(float r, float g, float b) {
-        this.b = b;
-        this.g = g;
         this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
-    public byte getBlue() {
-        return (byte) (this.b * 255);
+    public byte getRed() {
+        return (byte) (this.r * 255);
     }
 
     public byte getGreen() {
         return (byte) (this.g * 255);
     }
 
-    public byte getRed() {
-        return (byte) (this.r * 255);
+    public byte getBlue() {
+        return (byte) (this.b * 255);
     }
 
 }

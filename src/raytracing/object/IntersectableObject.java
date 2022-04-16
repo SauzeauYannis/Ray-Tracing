@@ -1,7 +1,12 @@
+package raytracing.object;
+
+import raytracing.utils.Color;
+import raytracing.utils.Vec3f;
+
 public abstract class IntersectableObject {
 
     private Color color;
-    
+
     public IntersectableObject(Color color) {
         this.color = color;
     }

@@ -1,3 +1,8 @@
+package raytracing.object;
+
+import raytracing.utils.Color;
+import raytracing.utils.Vec3f;
+
 public class Sphere extends IntersectableObject {
 
     private Vec3f C;
@@ -28,9 +33,13 @@ public class Sphere extends IntersectableObject {
             double lambda1 = (-b - Math.sqrt(delta)) / (2 * a);
             double lambda2 = (-b + Math.sqrt(delta)) / (2 * a);
 
-            if (lambda1 < 0 && 0 < lambda2) return lambda2;
-            else if (0 < lambda1 && lambda1 < lambda2) return lambda1;
-            else return -1;
+            if (lambda1 < 0 && 0 < lambda2) {
+                return lambda2;
+            } else if (0 < lambda1 && lambda1 < lambda2) {
+                return lambda1;
+            } else {
+                return -1;
+            }
         }
     }
 

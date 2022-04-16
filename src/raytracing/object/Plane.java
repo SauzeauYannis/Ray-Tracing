@@ -1,3 +1,8 @@
+package raytracing.object;
+
+import raytracing.utils.Color;
+import raytracing.utils.Vec3f;
+
 public class Plane extends IntersectableObject {
 
     private Vec3f n;
@@ -11,7 +16,8 @@ public class Plane extends IntersectableObject {
 
     @Override
     public double getIntersection(Vec3f P, Vec3f v) {
-        if (n.dotProduct(v) == 0) return -1;
+        if (n.dotProduct(v) == 0)
+            return -1;
 
         float lambda = (-n.dotProduct(P) - d) / n.dotProduct(v);
 
