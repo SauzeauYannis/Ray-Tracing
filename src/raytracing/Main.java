@@ -9,15 +9,23 @@ public class Main extends JavaTga {
 
     public static void main(String[] args) {
         String filename = "test.tga";
-
-        if (args.length > 0)
-            filename = args[0];
-
-        Scene scene = new Scene();
-
         int w = 1024;
         int h = 768;
         float D = 0.25f;
+
+        try {
+            filename = args[0];
+            w = Integer.parseInt(args[1]);
+            h = Integer.parseInt(args[2]);
+            D = Float.parseFloat(args[3]);
+        } catch (Exception e) {
+            System.out.println("Usage: java Main <filename> <width> <height> <distance>");
+            System.out.println("Default values: java Main test.tga 1024 768 0.25");
+            System.out.println("=======================================================");
+        }
+
+        Scene scene = new Scene();
+
         byte buffer[] = new byte[3 * w * h];
 
         for (int row = 0; row < h; row++) { // for each row of the image
