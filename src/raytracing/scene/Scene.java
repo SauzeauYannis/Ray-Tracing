@@ -77,7 +77,6 @@ public class Scene {
                     lightDirection.normalize();
 
                     double weight = Math.max(nI.dotProduct(lightDirection), 0.0D);
-                    //double shininess = Math.max(nI.dotProduct(I), 0.0D);
                     Vec3 h = lightDirection.add(v);
                     h.normalize();
                     double shininess = Math.max(nI.dotProduct(h), 0.0D);
