@@ -1,0 +1,19 @@
+public class Light {
+
+    private Vec3f position;
+    private Color ambient;
+    private Color diffuse;
+    private Color specular;
+
+    public Light(Vec3f position, Color ambient, Color diffuse, Color specular) {
+        this.position = position;
+        this.ambient = ambient;
+        this.diffuse = diffuse;
+        this.specular = specular;
+    }
+
+    public Vec3f getPosition() {
+        return position;
+    }
+    
+}
