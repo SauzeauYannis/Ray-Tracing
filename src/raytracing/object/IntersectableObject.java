@@ -7,11 +7,13 @@ public abstract class IntersectableObject {
 
     private Color color;
     private Color specularColor;
+    private Color reflectiveColor;
     private double shininess;
 
-    public IntersectableObject(Color color, Color specularColor, double shininess) {
+    public IntersectableObject(Color color, Color specularColor, Color reflectiveColor, double shininess) {
         this.color = color;
         this.specularColor = specularColor;
+        this.reflectiveColor = reflectiveColor;
         this.shininess = shininess;
     }
 
@@ -33,6 +35,10 @@ public abstract class IntersectableObject {
 
     public double getShininess() {
         return shininess;
+    }
+
+    public Color getReflectiveColor() {
+        return reflectiveColor;
     }
 
 }

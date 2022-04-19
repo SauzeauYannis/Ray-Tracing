@@ -39,7 +39,10 @@ public class Scene {
         this.lights.add(light);
     }
 
-    public Color findColor(Vec3 P, Vec3 v) {
+    public Color findColor(Vec3 P, Vec3 v, int depth) {
+        if (depth == 0)
+            return Color.BLACK;
+
         Color color = Color.BLACK;
         double lambdaI = Double.MAX_VALUE;
         IntersectableObject objectI = null;
@@ -53,17 +56,20 @@ public class Scene {
             }
         }
 
-        if (objectI != null) {
-            Vec3 I = objectI.getIntersectionPoint(P, v, lambdaI);
+        if (objectI == null) {
+            return Color.BLACK;
+        } else {
+            Vec3 I = objectI.getIntersectionPoint(P, v, lambdaI); // I = P + lambda * v
             Vec3 nI = objectI.getNormal(I);
 
             color = objectI.getColor().multiply(Light.AMBIENT_LIGHT);
 
             for (Light light : this.lights) {
+                Vec3 IS = light.getPosition().sub(I);
+
                 boolean visible = true;
 
                 for (IntersectableObject object : this.objects) {
-                    Vec3 IS = light.getPosition().sub(I);
                     double lambdaObj = object.getIntersection(I, IS);
 
                     if (0.0D < lambdaObj && lambdaObj < 1.0D)
@@ -71,27 +77,36 @@ public class Scene {
                 }
 
                 if (visible) {
-                    nI.normalize();
+                    nI.normalize(); // nI / ||nI||
+                    IS.normalize(); // IS / ||IS||
+                    v.normalize();
 
-                    Vec3 lightDirection = light.getPosition().sub(I);
-                    lightDirection.normalize();
+                    double nIDotIS = Math.max(nI.dotProduct(IS), 0.0D); // niDotIS = max(nI . IS, 0)
 
-                    double weight = Math.max(nI.dotProduct(lightDirection), 0.0D);
-                    Vec3 h = lightDirection.add(v);
-                    h.normalize();
-                    double shininess = Math.max(nI.dotProduct(h), 0.0D);
+                    Vec3 r = IS.sub(nI.mul(2.0D * nIDotIS)); // r = IS - 2 * nIDotIS * nI
+                    double rDotV = Math.max(r.dotProduct(v), 0.0D); // rDotV = max(r . v, 0)
 
-                    Color diffuse = light.getDiffuse().multiply(objectI.getColor()).multiply(weight);
-                    Color specular = light.getSpecular().multiply(objectI.getSpecularColor()).multiply(Math.pow(shininess, objectI.getShininess()));
-                    
+                    Color diffuse = light.getDiffuse().multiply(objectI.getColor()).multiply(nIDotIS); // light.diffuse
+                                                                                                       // * object.color
+                                                                                                       // * niDotIS
+                    Color specular = light.getSpecular().multiply(objectI.getSpecularColor())
+                            .multiply(Math.pow(rDotV, objectI.getShininess())); // light.specular *
+                                                                                // object.specularColor * pow(rDotV,
+                                                                                // object.shininess)
+
                     color = color.add(diffuse).add(specular);
-                } else {
-                    color = Color.BLACK;
                 }
             }
-        }
 
-        return color;
+            Vec3 r = v.sub(nI.mul(2.0D * nI.dotProduct(v))); // r = v - 2 * nIDotV * nI
+
+            color = color.add(objectI.getReflectiveColor().multiply(findColor(I, r, depth - 1))); // object.reflectiveColor
+                                                                                                  // *
+                                                                                                  // findColor(I, r,
+                                                                                                  // depth - 1)
+
+            return color;
+        }
     }
 
 }

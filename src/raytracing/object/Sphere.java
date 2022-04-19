@@ -8,14 +8,14 @@ public class Sphere extends IntersectableObject {
     private Vec3 C;
     private double r;
 
-    public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess) {
-        super(color, specularColor, shininess);
+    public Sphere(Vec3 center, double radius, Color color, Color specularColor, Color reflectiveColor, double shininess) {
+        super(color, specularColor, reflectiveColor, shininess);
         this.C = center;
         this.r = radius;
     }
 
     public Sphere(Vec3 center, double radius, Color color) {
-        this(center, radius, color, Color.WHITE, 10.0D);
+        this(center, radius, color, Color.WHITE, Color.WHITE, 10.0D);
     }
 
     @Override

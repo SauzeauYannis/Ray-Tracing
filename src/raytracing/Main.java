@@ -12,16 +12,18 @@ public class Main extends JavaTga {
         int w = 1280;
         int h = 720;
         double D = 0.5D;
+        int maxDepth = 2;
 
         try {
             filename = args[0];
             w = Integer.parseInt(args[1]);
             h = Integer.parseInt(args[2]);
             D = Double.parseDouble(args[3]);
+            maxDepth = Integer.parseInt(args[4]);
         } catch (Exception e) {
-            System.out.println("Usage: java Main <filename> <width> <height> <distance>");
-            System.out.println("Default values: java Main " + filename + " " + w + " " + h + " " + D);
-            System.out.println("=======================================================");
+            System.out.println("Usage: java Main <filename> <width> <height> <distance> <maxDepth>");
+            System.out.println("Default values: java Main " + filename + " " + w + " " + h + " " + D + " " + maxDepth);
+            System.out.println("===============================================================");
         }
 
         Scene scene = new Scene();
@@ -39,7 +41,7 @@ public class Main extends JavaTga {
                         ((double) row - (double) h / 2.0D) / (double) h,
                         -D);
 
-                Color color = scene.findColor(P, v);
+                Color color = scene.findColor(P, v, maxDepth);
 
                 buffer[index] = color.getBlue();
                 buffer[index + 1] = color.getGreen();
