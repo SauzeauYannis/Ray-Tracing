@@ -7,14 +7,18 @@ public abstract class IntersectableObject {
 
     private Color color;
     private Color specularColor;
-    private Color reflectiveColor;
     private double shininess;
+    private double kr;
+    private double kt;
+    private double eta;
 
-    public IntersectableObject(Color color, Color specularColor, Color reflectiveColor, double shininess) {
+    public IntersectableObject(Color color, Color specularColor, double shininess, double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
         this.color = color;
         this.specularColor = specularColor;
-        this.reflectiveColor = reflectiveColor;
         this.shininess = shininess;
+        this.kr = reflectionCoeff;
+        this.kt = transmissionCoeff;
+        this.eta = refractionIndex;
     }
 
     public abstract double getIntersection(Vec3 P, Vec3 v);
@@ -37,8 +41,16 @@ public abstract class IntersectableObject {
         return shininess;
     }
 
-    public Color getReflectiveColor() {
-        return reflectiveColor;
+    public double getReflectionCoeff() {
+        return kr;
+    }
+
+    public double getTransmissionCoeff() {
+        return kt;
+    }
+
+    public double getRefractionIndex() {
+        return eta;
     }
 
 }

@@ -8,14 +8,15 @@ public class Plane extends IntersectableObject {
     private Vec3 n;
     private double d;
 
-    public Plane(Vec3 normal, double distance, Color color, Color specularColor, Color reflectiveColor, double shininess) {
-        super(color, specularColor, reflectiveColor, shininess);
+    public Plane(Vec3 normal, double distance, Color color, Color specularColor, double shininess,
+            double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
+        super(color, specularColor, shininess, reflectionCoeff, transmissionCoeff, refractionIndex);
         this.n = normal;
         this.d = distance;
     }
 
     public Plane(Vec3 normal, double distance, Color color) {
-        this(normal, distance, color, Color.WHITE, Color.WHITE, 10.0D);
+        this(normal, distance, color, Color.WHITE, 10.0D, 0.0D, 0.0D, 1.0D);
     }
 
     @Override
