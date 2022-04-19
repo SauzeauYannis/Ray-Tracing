@@ -17,10 +17,10 @@ public class Scene {
     private static final Plane floor = new Plane(new Vec3(0.0D, 1.0D, 0.0D), 1.5D, Color.CYAN);
     private static final Plane ceiling = new Plane(new Vec3(0.0D, -1.0D, 0.0D), 1.5D, Color.MAGENTA);
 
-    private static final Sphere sphere = new Sphere(new Vec3(0.0D, 0.0D, -1.0D), 0.25D, Color.BLACK);
-
+    private static final Sphere sphere = new Sphere(new Vec3(0.0D, 0.0D, -1.0D), 0.5D, Color.DARK_GRAY);
+    private static final Sphere sphere2 = new Sphere(new Vec3(1.0D, 0.25D, -1.0D), 0.25D, Color.RED, Color.WHITE, 10.0D, 0.1D, 0.75D, 1D);
+    private static final Sphere sphere3 = new Sphere(new Vec3(-1.0D, -0.25D, -1.0D), 0.25D, Color.BLUE, Color.WHITE, 10.0D, 0.35D, 0.15D, 1D);
     private static final Light light = new Light(new Vec3(0.25D, 0.25D, 0.25D), Color.WHITE, Color.LIGHT_GRAY);
-    //private static final Light light = new Light(new Vec3(0.0D, 0.0D, 0.0D), Color.WHITE, Color.LIGHT_GRAY);
 
     private ArrayList<IntersectableObject> objects;
     private ArrayList<Light> lights;
@@ -36,6 +36,8 @@ public class Scene {
         this.objects.add(ceiling);
         this.objects.add(floor);
         this.objects.add(sphere);
+        this.objects.add(sphere2);
+        this.objects.add(sphere3);
 
         this.lights.add(light);
     }
@@ -80,7 +82,7 @@ public class Scene {
             if (visible) {
                 nI.normalize(); // nI / ||nI||
                 IS.normalize(); // IS / ||IS||
-                v.normalize();
+                v.normalize(); // v / ||v||
 
                 double nIDotIS = Math.max(nI.dotProduct(IS), 0.0D); // niDotIS = max(nI . IS, 0)
 
@@ -99,14 +101,18 @@ public class Scene {
             }
         }
 
-        if (objectI.getReflectionCoeff() > 0.0D || objectI.getTransmissionCoeff() > 0.0D) {
+        if (objectI.getReflectionCoeff() > 0.0D) {
             Vec3 r = v.sub(nI.mul(2.0D * nI.dotProduct(v))); // r = v - 2 * nIDotV * nI
             color = color.add(findColor(I, r, depth - 1).multiply(objectI.getReflectionCoeff()));
         }
 
         if (objectI.getTransmissionCoeff() > 0.0D) {
-            double eta = nI.dotProduct(v) > 0.0D ? objectI.getRefractionIndex() : 1.0D / objectI.getRefractionIndex(); 
-            double c1 = nI.dotProduct(v); // c1 = nI . v
+            boolean inside = nI.dotProduct(v) > 0.0D;
+            if (inside)
+                nI = nI.mul(-1.0D);
+
+            double eta = inside ? objectI.getRefractionIndex() : 1.0D / objectI.getRefractionIndex(); 
+            double c1 = -nI.dotProduct(v); // c1 = nI . v
             double c2 = Math.sqrt(1.0D - eta * eta * (1.0D - c1 * c1)); // c2 = sqrt(1 - eta^2 * (1 - c1^2))
             Vec3 t = v.mul(eta).add(nI.mul(eta * c1 - c2)); // t = eta * v + (eta * c1 - c2) * nI
             color = color.add(findColor(I, t, depth - 1).multiply(objectI.getTransmissionCoeff()));

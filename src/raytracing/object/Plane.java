@@ -16,7 +16,7 @@ public class Plane extends IntersectableObject {
     }
 
     public Plane(Vec3 normal, double distance, Color color) {
-        this(normal, distance, color, Color.WHITE, 10.0D, 0.0D, 0.0D, 1.0D);
+        this(normal, distance, color, Color.WHITE, 10.0D, 0.20D, 0.0D, 1.0D);
     }
 
     @Override

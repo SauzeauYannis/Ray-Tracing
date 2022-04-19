@@ -12,7 +12,7 @@ public class Main extends JavaTga {
         int w = 1280;
         int h = 720;
         double D = 0.5D;
-        int maxDepth = 10;
+        int maxDepth = 5;
 
         try {
             filename = args[0];

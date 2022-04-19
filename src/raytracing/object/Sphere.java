@@ -16,7 +16,7 @@ public class Sphere extends IntersectableObject {
     }
 
     public Sphere(Vec3 center, double radius, Color color) {
-        this(center, radius, color, Color.WHITE, 10.0D, 0.1D, 0.9D, 1.5D);
+        this(center, radius, color, Color.WHITE, 10.0D, 0.02D, 0.5D, 1D);
     }
 
     @Override
