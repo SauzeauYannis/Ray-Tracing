@@ -5,8 +5,8 @@ import raytracing.utils.Vec3;
 
 public class Plane extends IntersectableObject {
 
-    private Vec3 n;
-    private double d;
+    private final Vec3 n;
+    private final double d;
 
     public Plane(Vec3 normal, double distance, Color color, Color specularColor, double shininess,
             double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
@@ -15,8 +15,17 @@ public class Plane extends IntersectableObject {
         this.d = distance;
     }
 
+    public Plane(Vec3 normal, double distance, Color color, Color specularColor, double shininess,
+            double reflectionCoeff) {
+        this(normal, distance, color, specularColor, shininess, reflectionCoeff, 0.0D, 1.0D);
+    }
+
+    public Plane(Vec3 normal, double distance, Color color, Color specularColor, double shininess) {
+        this(normal, distance, color, specularColor, shininess, 0.0D, 0.0D, 1.0D);
+    }
+
     public Plane(Vec3 normal, double distance, Color color) {
-        this(normal, distance, color, Color.WHITE, 10.0D, 0.20D, 0.0D, 1.0D);
+        this(normal, distance, color, Color.WHITE, 10.0D, 0.0D, 0.0D, 1.0D);
     }
 
     @Override

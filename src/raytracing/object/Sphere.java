@@ -5,14 +5,23 @@ import raytracing.utils.Vec3;
 
 public class Sphere extends IntersectableObject {
 
-    private Vec3 C;
-    private double r;
+    private final Vec3 C;
+    private final double r;
 
     public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess,
             double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
         super(color, specularColor, shininess, reflectionCoeff, transmissionCoeff, refractionIndex);
         this.C = center;
         this.r = radius;
+    }
+
+    public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess,
+            double reflectionCoeff) {
+        this(center, radius, color, specularColor, shininess, reflectionCoeff, 0.0D, 1.0D);
+    }
+
+    public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess) {
+        this(center, radius, color, specularColor, shininess, 0.0D, 0.0D, 1.0D);
     }
 
     public Sphere(Vec3 center, double radius, Color color) {

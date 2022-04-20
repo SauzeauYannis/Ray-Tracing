@@ -5,14 +5,16 @@ import raytracing.utils.Vec3;
 
 public abstract class IntersectableObject {
 
-    private Color color;
-    private Color specularColor;
-    private double shininess;
-    private double kr;
-    private double kt;
-    private double eta;
+    private final Color color;
+    private final Color specularColor;
 
-    public IntersectableObject(Color color, Color specularColor, double shininess, double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
+    private final double shininess;
+    private final double kr;
+    private final double kt;
+    private final double eta;
+
+    public IntersectableObject(Color color, Color specularColor, double shininess, double reflectionCoeff,
+            double transmissionCoeff, double refractionIndex) {
         this.color = color;
         this.specularColor = specularColor;
         this.shininess = shininess;
