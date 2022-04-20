@@ -65,6 +65,10 @@ public class Scene {
         Vec3 I = objectI.getIntersectionPoint(P, v, lambdaI); // I = P + lambda * v
         Vec3 nI = objectI.getNormal(I);
 
+        boolean inside = nI.dotProduct(v) > 0.0D;
+        if (inside)
+            nI = nI.mul(-1.0D);
+    
         color = objectI.getColor().multiply(Light.AMBIENT_LIGHT);
 
         for (Light light : this.lights) {
@@ -107,10 +111,6 @@ public class Scene {
         }
 
         if (objectI.getTransmissionCoeff() > 0.0D) {
-            boolean inside = nI.dotProduct(v) > 0.0D;
-            if (inside)
-                nI = nI.mul(-1.0D);
-
             double eta = inside ? objectI.getRefractionIndex() : 1.0D / objectI.getRefractionIndex(); 
             double c1 = -nI.dotProduct(v); // c1 = nI . v
             double c2 = Math.sqrt(1.0D - eta * eta * (1.0D - c1 * c1)); // c2 = sqrt(1 - eta^2 * (1 - c1^2))

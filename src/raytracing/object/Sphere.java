@@ -34,7 +34,7 @@ public class Sphere extends IntersectableObject {
 
             if (lambda > 0.0001D)
                 return lambda;
-        } else {
+        } else if (delta > 0.0D) {
             double lambda1 = (-b - Math.sqrt(delta)) / (2.0D * a); // (-b - sqrt(delta)) / (2a)
             double lambda2 = (-b + Math.sqrt(delta)) / (2.0D * a); // (-b + sqrt(delta)) / (2a)
 
