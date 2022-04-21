@@ -11,8 +11,9 @@ public class Main extends JavaTga {
         String filename = "test.tga";
         int w = 1280;
         int h = 720;
-        double D = 0.5D;
-        int maxDepth = 10;
+        double D = 1D;
+        int maxDepth = 5;
+        int sceneNumber = 2;
 
         try {
             filename = args[0];
@@ -27,10 +28,19 @@ public class Main extends JavaTga {
         }
 
         Scene scene = new Scene();
+        Vec3 P = new Vec3();
+
+        switch (sceneNumber) {
+            case 1:
+                scene.createScene1();
+                break;
+            case 2:
+                scene.createScene2();
+                P = new Vec3(2, 4, 20);
+                break;
+        }
 
         byte buffer[] = new byte[3 * w * h];
-
-        Vec3 P = new Vec3();
 
         for (int row = 0; row < h; row++) { // for each row of the image
             for (int col = 0; col < w; col++) { // for each column of the image

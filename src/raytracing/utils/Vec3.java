@@ -16,6 +16,18 @@ public class Vec3 {
 		this(0.0D, 0.0D, 0.0D);
 	}
 
+	public double getX() {
+		return this.x;
+	}
+
+	public double getY() {
+		return this.y;
+	}
+
+	public double getZ() {
+		return this.z;
+	}
+
 	public Vec3 add(Vec3 v) {
 		return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
 	}
@@ -33,10 +45,13 @@ public class Vec3 {
 	}
 
     public void normalize() {
-		double length = Math.sqrt(this.dotProduct(this));
-		this.x /= length;
-		this.y /= length;
-		this.z /= length;
+		double lengthSquare = this.dotProduct(this);
+		if (lengthSquare > 0.0D) {
+			double length = Math.sqrt(lengthSquare);
+			this.x /= length;
+			this.y /= length;
+			this.z /= length;
+		}
 	}
 
 }

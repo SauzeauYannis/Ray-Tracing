@@ -2,6 +2,7 @@ package raytracing.scene;
 
 import java.util.ArrayList;
 
+import raytracing.object.Checkerboard;
 import raytracing.object.IntersectableObject;
 import raytracing.object.Plane;
 import raytracing.object.Sphere;
@@ -10,43 +11,27 @@ import raytracing.utils.Vec3;
 
 public class Scene {
 
-    private static final Plane backWall = new Plane(new Vec3(0.0D, 0.0D, -1.0D), 3.0D, Color.RED);
-    private static final Plane frontWall = new Plane(new Vec3(0.0D, 0.0D, 1.0D), 3.0D, Color.GREEN);
-    private static final Plane leftWall = new Plane(new Vec3(1.0D, 0.0D, 0.0D), 3.0D, Color.BLUE);
-    private static final Plane rightWall = new Plane(new Vec3(-1.0D, 0.0D, 0.0D), 3.0D, Color.YELLOW);
-    private static final Plane floor = new Plane(new Vec3(0.0D, 1.0D, 0.0D), 1.5D, Color.CYAN);
-    private static final Plane ceiling = new Plane(new Vec3(0.0D, -1.0D, 0.0D), 1.5D, Color.MAGENTA);
-
-    private static final Sphere sphere = new Sphere(new Vec3(0.0D, 0.0D, -1.0D), 0.5D, Color.DARK_GRAY);
-    private static final Sphere sphere2 = new Sphere(new Vec3(1.0D, 0.25D, -1.0D), 0.25D, Color.RED, Color.WHITE, 10.0D, 0.1D, 0.75D, 1D);
-    private static final Sphere sphere3 = new Sphere(new Vec3(-1.0D, -0.25D, -1.0D), 0.25D, Color.BLUE, Color.WHITE, 10.0D, 0.35D, 0.15D, 1D);
-    private static final Light light = new Light(new Vec3(0.25D, 0.25D, 0.25D), Color.WHITE, Color.LIGHT_GRAY);
-
-    private ArrayList<IntersectableObject> objects;
-    private ArrayList<Light> lights;
+    private final ArrayList<IntersectableObject> objects;
+    private final ArrayList<Light> lights;
 
     public Scene() {
         this.objects = new ArrayList<IntersectableObject>();
         this.lights = new ArrayList<Light>();
+    }
 
-        this.objects.add(backWall);
-        this.objects.add(frontWall);
-        this.objects.add(leftWall);
-        this.objects.add(rightWall);
-        this.objects.add(ceiling);
-        this.objects.add(floor);
-        this.objects.add(sphere);
-        this.objects.add(sphere2);
-        this.objects.add(sphere3);
+    public void addObject(IntersectableObject object) {
+        this.objects.add(object);
+    }
 
+    public void addLight(Light light) {
         this.lights.add(light);
     }
 
     public Color findColor(Vec3 P, Vec3 v, int depth) {
         if (depth == 0)
-            return Color.BLACK;
+            return Light.AMBIENT_LIGHT;
 
-        Color color = Color.BLACK;
+        Color color = Light.AMBIENT_LIGHT;
         double lambdaI = Double.MAX_VALUE;
         IntersectableObject objectI = null;
 
@@ -60,7 +45,7 @@ public class Scene {
         }
 
         if (objectI == null)
-            return Color.BLACK;
+            return Light.AMBIENT_LIGHT;
 
         Vec3 I = objectI.getIntersectionPoint(P, v, lambdaI); // I = P + lambda * v
         Vec3 nI = objectI.getNormal(I);
@@ -68,8 +53,8 @@ public class Scene {
         boolean inside = nI.dotProduct(v) > 0.0D;
         if (inside)
             nI = nI.mul(-1.0D);
-    
-        color = objectI.getColor().multiply(Light.AMBIENT_LIGHT);
+
+        color = objectI.getColor(I).multiply(Light.AMBIENT_LIGHT);
 
         for (Light light : this.lights) {
             Vec3 IS = light.getPosition().sub(I);
@@ -93,7 +78,7 @@ public class Scene {
                 Vec3 r = IS.sub(nI.mul(2.0D * nIDotIS)); // r = IS - 2 * nIDotIS * nI
                 double rDotV = Math.max(r.dotProduct(v), 0.0D); // rDotV = max(r . v, 0)
 
-                Color diffuse = light.getDiffuse().multiply(objectI.getColor()).multiply(nIDotIS); // light.diffuse
+                Color diffuse = light.getDiffuse().multiply(objectI.getColor(I)).multiply(nIDotIS); // light.diffuse
                                                                                                    // * object.color
                                                                                                    // * niDotIS
                 Color specular = light.getSpecular().multiply(objectI.getSpecularColor())
@@ -107,19 +92,69 @@ public class Scene {
 
         if (objectI.getReflectionCoeff() > 0.0D) {
             Vec3 r = v.sub(nI.mul(2.0D * nI.dotProduct(v))); // r = v - 2 * nIDotV * nI
+            r.normalize(); // r / ||r||
             color = color.add(findColor(I, r, depth - 1).multiply(objectI.getReflectionCoeff()));
         }
 
         if (objectI.getTransmissionCoeff() > 0.0D) {
-            double eta = inside ? objectI.getRefractionIndex() : 1.0D / objectI.getRefractionIndex(); 
+            double eta = inside ? objectI.getRefractionIndex() : 1.0D / objectI.getRefractionIndex();
             double c1 = -nI.dotProduct(v); // c1 = nI . v
             double c2 = Math.sqrt(1.0D - eta * eta * (1.0D - c1 * c1)); // c2 = sqrt(1 - eta^2 * (1 - c1^2))
             Vec3 t = v.mul(eta).add(nI.mul(eta * c1 - c2)); // t = eta * v + (eta * c1 - c2) * nI
+            t.normalize(); // t / ||t||
             color = color.add(findColor(I, t, depth - 1).multiply(objectI.getTransmissionCoeff()));
         }
 
         return color;
+    }
 
+    public void createScene1() {
+        this.addObject(new Plane(new Vec3(0.0D, 0.0D, -1.0D), 6.0D, Color.RED, Color.LIGHT_GRAY, 20.0D, 0.1D));
+        this.addObject(new Plane(new Vec3(0.0D, 0.0D, 1.0D), 6.0D, Color.GREEN, Color.LIGHT_GRAY, 20.0D, 0.1D));
+        this.addObject(new Plane(new Vec3(1.0D, 0.0D, 0.0D), 3.0D, Color.BLUE, Color.LIGHT_GRAY, 20.0D, 0.1D));
+        this.addObject(new Plane(new Vec3(-1.0D, 0.0D, 0.0D), 3.0D, Color.YELLOW, Color.LIGHT_GRAY, 20.0D, 0.1D));
+        this.addObject(new Plane(new Vec3(0.0D, 1.0D, 0.0D), 1.5D, Color.CYAN, Color.LIGHT_GRAY, 20.0D, 0.1D));
+        this.addObject(new Plane(new Vec3(0.0D, -1.0D, 0.0D), 1.5D, Color.MAGENTA, Color.LIGHT_GRAY, 20.0D, 0.1D));
+
+        this.addObject(
+                new Sphere(new Vec3(0.0D, 0.0D, -4.0D), 1D, Color.DARK_GRAY, Color.WHITE, 10.0D, 0.0D, 0.75D, 1.1D));
+        this.addObject(
+                new Sphere(new Vec3(2.0D, 1.0D, -4.0D), 0.5D, Color.RED, Color.WHITE, 10.0D, 0.1D, 0.75D, 1.1D));
+        this.addObject(
+                new Sphere(new Vec3(-2.0D, -1.0D, -4.0D), 0.5D, Color.BLUE, Color.WHITE, 10.0D, 0.35D, 0.15D, 1.0D));
+
+        this.addLight(new Light(new Vec3(1D, 1D, 0D), Color.WHITE, Color.LIGHT_GRAY));
+    }
+
+    // source: https://commons.wikimedia.org/wiki/File:Raytracing_reflection.png
+    public void createScene2() {
+        this.addObject(new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, Color.BLACK, Color.WHITE, Color.WHITE, 1000.0D, 0.3D));
+
+        this.addObject(new Sphere(new Vec3(7, 3, -2), 3, Color.RED, Color.WHITE, 1000.0D, 0.3D));
+        this.addObject(new Sphere(new Vec3(0, 3, -1), 3, Color.GREEN, Color.WHITE, 1000.0D, 0.6D));
+        this.addObject(new Sphere(new Vec3(-6.5, 3, 0), 3, Color.BLUE, Color.WHITE, 1000.0D, 0.8D));
+
+        this.addLight(new Light(new Vec3(0D, 20D, 20D), Color.WHITE, Color.LIGHT_GRAY));
+        Light.AMBIENT_LIGHT = Color.BLACK;
+    }
+
+    public void createScene3() {
+//         # the checkered floor
+// - add: plane
+//   transform:
+//     - [ rotate-y, 0.31415 ]
+//   material:
+//     pattern:
+//       type: checkers
+//       colors:
+//         - [0.35, 0.35, 0.35]
+//         - [0.65, 0.65, 0.65]
+//     specular: 0
+//     reflective: 0.4
+//     transparency: 0
+//    refractive_index: 1
+//    shininess: 1000
+      this.addObject(new Checkerboard(new Vec3(0.0D, 0.0D, -1.0D), 0D, new Color(0.35f, 0.35f, 0.35f), new Color(0.65f, 0.65f, 0.65f), Color.WHITE, 1000.0D, 0.3D));
     }
 
 }

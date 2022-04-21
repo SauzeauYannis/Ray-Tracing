@@ -31,7 +31,7 @@ public abstract class IntersectableObject {
         return P.add(v.mul(lambdaI));
     }
 
-    public Color getColor() {
+    public Color getColor(Vec3 I) {
         return color;
     }
 
