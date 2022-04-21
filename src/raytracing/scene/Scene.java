@@ -79,8 +79,8 @@ public class Scene {
                 double rDotV = Math.max(r.dotProduct(v), 0.0D); // rDotV = max(r . v, 0)
 
                 Color diffuse = light.getDiffuse().multiply(objectI.getColor(I)).multiply(nIDotIS); // light.diffuse
-                                                                                                   // * object.color
-                                                                                                   // * niDotIS
+                                                                                                    // * object.color
+                                                                                                    // * niDotIS
                 Color specular = light.getSpecular().multiply(objectI.getSpecularColor())
                         .multiply(Math.pow(rDotV, objectI.getShininess())); // light.specular *
                                                                             // object.specularColor * pow(rDotV,
@@ -128,33 +128,48 @@ public class Scene {
 
     // source: https://commons.wikimedia.org/wiki/File:Raytracing_reflection.png
     public void createScene2() {
-        this.addObject(new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, Color.BLACK, Color.WHITE, Color.WHITE, 1000.0D, 0.3D));
+        this.addObject(
+                new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, Color.BLACK, Color.WHITE, Color.WHITE, 1000.0D, 0.3D));
 
-        this.addObject(new Sphere(new Vec3(7, 3, -2), 3, Color.RED, Color.WHITE, 1000.0D, 0.3D));
-        this.addObject(new Sphere(new Vec3(0, 3, -1), 3, Color.GREEN, Color.WHITE, 1000.0D, 0.6D));
-        this.addObject(new Sphere(new Vec3(-6.5, 3, 0), 3, Color.BLUE, Color.WHITE, 1000.0D, 0.8D));
+        this.addObject(new Sphere(new Vec3(7, 3, -2), 3, Color.RED, Color.RED, 1000.0D, 0.3D));
+        this.addObject(new Sphere(new Vec3(0, 3, -1), 3, Color.GREEN, Color.GREEN, 1000.0D, 0.6D));
+        this.addObject(new Sphere(new Vec3(-6.5, 3, 0), 3, Color.BLUE, Color.BLUE, 1000.0D, 0.8D));
 
         this.addLight(new Light(new Vec3(0D, 20D, 20D), Color.WHITE, Color.LIGHT_GRAY));
         Light.AMBIENT_LIGHT = Color.BLACK;
     }
 
+    // source:
+    // https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
     public void createScene3() {
-//         # the checkered floor
-// - add: plane
-//   transform:
-//     - [ rotate-y, 0.31415 ]
-//   material:
-//     pattern:
-//       type: checkers
-//       colors:
-//         - [0.35, 0.35, 0.35]
-//         - [0.65, 0.65, 0.65]
-//     specular: 0
-//     reflective: 0.4
-//     transparency: 0
-//    refractive_index: 1
-//    shininess: 1000
-      this.addObject(new Checkerboard(new Vec3(0.0D, 0.0D, -1.0D), 0D, new Color(0.35f, 0.35f, 0.35f), new Color(0.65f, 0.65f, 0.65f), Color.WHITE, 1000.0D, 0.3D));
+        this.addObject(new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, new Color(0.35f, 0.35f, 0.35f),
+                new Color(0.65f, 0.65f, 0.65f), Color.WHITE, 1000.0D, 0.3D));
+
+        this.addObject(new Plane(new Vec3(0.0D, -1.0D, 0.0D), 5.0D, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1000.0D));
+        this.addObject(new Plane(new Vec3(1.0D, 0.0D, 0.0D), 5.0D, new Color(0.45f, 0.45f, 0.45f), Color.WHITE, 1000.0D,
+                0.3D));
+        this.addObject(
+                new Plane(new Vec3(-1.0D, 0.0D, 0.0D), 5.0D, new Color(0.55f, 0.55f, 0.55f), Color.WHITE, 1000.0D,
+                        0.3D));
+        this.addObject(new Plane(new Vec3(0.0D, 0.0D, 1.0D), 5.0D, new Color(0.45f, 0.45f, 0.45f), Color.WHITE, 1000.0D,
+                0.3D));
+        this.addObject(
+                new Plane(new Vec3(0.0D, 0.0D, -1.0D), 5.0D, new Color(0.55f, 0.55f, 0.55f), Color.WHITE, 1000.0D,
+                        0.3D));
+
+        this.addObject(new Sphere(new Vec3(4.6D, 0.4D, -1.0D), 0.4D, new Color(0.8f, 0.5f, 0.3f), Color.WHITE, 50.0D));
+        this.addObject(new Sphere(new Vec3(4.7D, 0.3D, -0.4D), 0.3D, new Color(0.9f, 0.4f, 0.5f), Color.WHITE, 50.0D));
+        this.addObject(new Sphere(new Vec3(-1.0D, 0.5D, -4.5D), 0.5D, new Color(0.4f, 0.9f, 0.6f), Color.WHITE, 50.0D));
+        this.addObject(new Sphere(new Vec3(-1.7D, 0.3D, -4.7D), 0.3D, new Color(0.4f, 0.6f, 0.9f), Color.WHITE, 50.0D));
+
+        this.addObject(new Sphere(new Vec3(-0.6D, 1.0D, -0.6D), 1.0D, new Color(1.0f, 0.3f, 0.2f), Color.WHITE, 5.0D));
+        this.addObject(new Sphere(new Vec3(0.6D, 0.7D, 0.6D), 0.7D, new Color(0.0f, 0.0f, 0.2f), Color.WHITE, 300.0D,
+                0.9D, 0.9D, 1.5D));
+        this.addObject(new Sphere(new Vec3(-0.7D, 0.5D, 0.8D), 0.5D, new Color(0.0f, 0.2f, 0.0f), Color.WHITE, 300.0D,
+                0.9D, 0.9D, 1.5D));
+                
+        this.addLight(new Light(new Vec3(-4.9D, 4.9D, 1.0D), Color.WHITE, Color.LIGHT_GRAY));
+        Light.AMBIENT_LIGHT = Color.BLACK;
     }
 
 }

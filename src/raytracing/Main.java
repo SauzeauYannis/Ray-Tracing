@@ -13,7 +13,7 @@ public class Main extends JavaTga {
         int h = 720;
         double D = 1D;
         int maxDepth = 5;
-        int sceneNumber = 2;
+        int sceneNumber = 3;
 
         try {
             filename = args[0];
@@ -37,6 +37,11 @@ public class Main extends JavaTga {
             case 2:
                 scene.createScene2();
                 P = new Vec3(2, 4, 20);
+                break;
+            case 3:
+                scene.createScene3();
+                P = new Vec3(-2.6, 1.5, 3.9);
+                D = 0.5D;
                 break;
         }
 
