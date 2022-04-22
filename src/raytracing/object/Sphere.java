@@ -1,13 +1,30 @@
 package raytracing.object;
 
-import raytracing.utils.Color;
-import raytracing.utils.Vec3;
+import raytracing.util.Color;
+import raytracing.util.Vec3;
 
+/**
+ * Class representing a Sphere.
+ * 
+ * @author Yannis Sauzeau
+ */
 public class Sphere extends IntersectableObject {
 
     private final Vec3 C;
     private final double r;
 
+    /**
+     * Constructor.
+     * 
+     * @param center            the center of the sphere
+     * @param radius            the radius of the sphere
+     * @param color             the color of the sphere
+     * @param specularColor     the specular color of the sphere
+     * @param shininess         the shininess of the sphere
+     * @param reflectionCoeff   the reflection coefficient of the sphere
+     * @param transmissionCoeff the transmission coefficient of the sphere
+     * @param refractionIndex   the refraction index of the sphere
+     */
     public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess,
             double reflectionCoeff, double transmissionCoeff, double refractionIndex) {
         super(color, specularColor, shininess, reflectionCoeff, transmissionCoeff, refractionIndex);
@@ -15,19 +32,48 @@ public class Sphere extends IntersectableObject {
         this.r = radius;
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param center          the center of the sphere
+     * @param radius          the radius of the sphere
+     * @param color           the color of the sphere
+     * @param specularColor   the specular color of the sphere
+     * @param shininess       the shininess of the sphere
+     * @param reflectionCoeff the reflection coefficient of the sphere
+     */
     public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess,
             double reflectionCoeff) {
         this(center, radius, color, specularColor, shininess, reflectionCoeff, 0.0D, 1.0D);
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param center        the center of the sphere
+     * @param radius        the radius of the sphere
+     * @param color         the color of the sphere
+     * @param specularColor the specular color of the sphere
+     * @param shininess     the shininess of the sphere
+     */
     public Sphere(Vec3 center, double radius, Color color, Color specularColor, double shininess) {
         this(center, radius, color, specularColor, shininess, 0.0D, 0.0D, 1.0D);
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param center the center of the sphere
+     * @param radius the radius of the sphere
+     * @param color  the color of the sphere
+     */
     public Sphere(Vec3 center, double radius, Color color) {
         this(center, radius, color, Color.WHITE, 10.0D, 0.02D, 0.5D, 1D);
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public double getIntersection(Vec3 P, Vec3 v) {
         Vec3 CP = P.sub(C); // CP
@@ -57,6 +103,9 @@ public class Sphere extends IntersectableObject {
         return -1.0D;
     }
 
+    /**
+     * @{inheritDoc}
+     */
     @Override
     public Vec3 getNormal(Vec3 I) {
         Vec3 CI = I.sub(C); // CI

@@ -6,27 +6,53 @@ import raytracing.object.Checkerboard;
 import raytracing.object.IntersectableObject;
 import raytracing.object.Plane;
 import raytracing.object.Sphere;
-import raytracing.utils.Color;
-import raytracing.utils.Vec3;
+import raytracing.util.Color;
+import raytracing.util.Vec3;
 
+/**
+ * Class representing a scene.
+ * 
+ * @author Yannis Sauzeau
+ */
 public class Scene {
 
     private final ArrayList<IntersectableObject> objects;
     private final ArrayList<Light> lights;
 
+    /**
+     * Constructor.
+     */
     public Scene() {
         this.objects = new ArrayList<IntersectableObject>();
         this.lights = new ArrayList<Light>();
     }
 
+    /**
+     * Add an object to the scene.
+     * 
+     * @param object the object to add
+     */
     public void addObject(IntersectableObject object) {
         this.objects.add(object);
     }
 
+    /**
+     * Add a light to the scene.
+     * 
+     * @param light the light to add
+     */
     public void addLight(Light light) {
         this.lights.add(light);
     }
 
+    /**
+     * Main method of the raytracer to find the color of a pixel.
+     * 
+     * @param P     the position of the ray
+     * @param v     the direction of the ray
+     * @param depth the depth of the recursion
+     * @return the color of the pixel
+     */
     public Color findColor(Vec3 P, Vec3 v, int depth) {
         if (depth == 0)
             return Light.AMBIENT_LIGHT;
@@ -57,7 +83,7 @@ public class Scene {
         color = objectI.getColor(I).multiply(Light.AMBIENT_LIGHT);
 
         for (Light light : this.lights) {
-            Vec3 IS = light.getPosition().sub(I);
+            Vec3 IS = light.getPosition().sub(I); // IS = S - I
 
             boolean visible = true;
 
@@ -108,6 +134,9 @@ public class Scene {
         return color;
     }
 
+    /**
+     * Create a basic scene like the one done in OpenGL.
+     */
     public void createScene1() {
         this.addObject(new Plane(new Vec3(0.0D, 0.0D, -1.0D), 6.0D, Color.RED, Color.LIGHT_GRAY, 20.0D, 0.1D));
         this.addObject(new Plane(new Vec3(0.0D, 0.0D, 1.0D), 6.0D, Color.GREEN, Color.LIGHT_GRAY, 20.0D, 0.1D));
@@ -117,7 +146,7 @@ public class Scene {
         this.addObject(new Plane(new Vec3(0.0D, -1.0D, 0.0D), 1.5D, Color.MAGENTA, Color.LIGHT_GRAY, 20.0D, 0.1D));
 
         this.addObject(
-                new Sphere(new Vec3(0.0D, 0.0D, -4.0D), 1D, Color.DARK_GRAY, Color.WHITE, 10.0D, 0.0D, 0.75D, 1.1D));
+                new Sphere(new Vec3(0.0D, 0.0D, -4.0D), 1D, Color.CYAN, Color.WHITE, 10.0D, 0.0D, 0.75D, 1.0D));
         this.addObject(
                 new Sphere(new Vec3(2.0D, 1.0D, -4.0D), 0.5D, Color.RED, Color.WHITE, 10.0D, 0.1D, 0.75D, 1.1D));
         this.addObject(
@@ -126,7 +155,10 @@ public class Scene {
         this.addLight(new Light(new Vec3(1D, 1D, 0D), Color.WHITE, Color.LIGHT_GRAY));
     }
 
-    // source: https://commons.wikimedia.org/wiki/File:Raytracing_reflection.png
+    /**
+     * Create a scene to test reflection like the one done in this link :
+     * https://commons.wikimedia.org/wiki/File:Raytracing_reflection.png
+     */
     public void createScene2() {
         this.addObject(
                 new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, Color.BLACK, Color.WHITE, Color.WHITE, 1000.0D, 0.3D));
@@ -136,11 +168,13 @@ public class Scene {
         this.addObject(new Sphere(new Vec3(-6.5, 3, 0), 3, Color.BLUE, Color.BLUE, 1000.0D, 0.8D));
 
         this.addLight(new Light(new Vec3(0D, 20D, 20D), Color.WHITE, Color.LIGHT_GRAY));
-        Light.AMBIENT_LIGHT = Color.BLACK;
     }
 
-    // source:
-    // https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
+    /**
+     * Create a scene to test reflection and refraction like the one done in this
+     * link :
+     * https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
+     */
     public void createScene3() {
         this.addObject(new Checkerboard(new Vec3(0.0D, 1.0D, 0.0D), 0D, new Color(0.35f, 0.35f, 0.35f),
                 new Color(0.65f, 0.65f, 0.65f), Color.WHITE, 1000.0D, 0.3D));
@@ -167,9 +201,8 @@ public class Scene {
                 0.9D, 0.9D, 1.5D));
         this.addObject(new Sphere(new Vec3(-0.7D, 0.5D, 0.8D), 0.5D, new Color(0.0f, 0.2f, 0.0f), Color.WHITE, 300.0D,
                 0.9D, 0.9D, 1.5D));
-                
+
         this.addLight(new Light(new Vec3(-4.9D, 4.9D, 1.0D), Color.WHITE, Color.LIGHT_GRAY));
-        Light.AMBIENT_LIGHT = Color.BLACK;
     }
 
 }

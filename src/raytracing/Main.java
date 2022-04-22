@@ -1,34 +1,48 @@
 package raytracing;
 
 import raytracing.scene.Scene;
-import raytracing.utils.Color;
-import raytracing.utils.JavaTga;
-import raytracing.utils.Vec3;
+import raytracing.util.Color;
+import raytracing.util.JavaTga;
+import raytracing.util.Vec3;
 
+/**
+ * Main class of the raytracing program.
+ *
+ * @author Yannis Sauzeau
+ */
 public class Main extends JavaTga {
 
+    
+    /** 
+     * The main method.
+     * 
+     * @param args the command line arguments -> usage: java raytracing.Main <sceneNumber> <maxDepth> <width> <height>");
+     */
     public static void main(String[] args) {
-        String filename = "test.tga";
+        int sceneNumber = 1;
+        int maxDepth = 5;
         int w = 1280;
         int h = 720;
-        double D = 1D;
-        int maxDepth = 5;
-        int sceneNumber = 3;
 
         try {
-            filename = args[0];
-            w = Integer.parseInt(args[1]);
-            h = Integer.parseInt(args[2]);
-            D = Double.parseDouble(args[3]);
-            maxDepth = Integer.parseInt(args[4]);
+            sceneNumber = Integer.parseInt(args[0]);
+            if (args.length > 1) {
+                maxDepth = Integer.parseInt(args[1]);
+                if (args.length > 2) {
+                    w = Integer.parseInt(args[2]);
+                    h = Integer.parseInt(args[3]);
+                }
+            }
         } catch (Exception e) {
-            System.out.println("Usage: java Main <filename> <width> <height> <distance> <maxDepth>");
-            System.out.println("Default values: java Main " + filename + " " + w + " " + h + " " + D + " " + maxDepth);
+            System.out.println("Usage: java raytracing.Main <sceneNumber> <maxDepth> <width> <height>");
+            System.out.println("Default values: java raytracing.Main " + sceneNumber + " " + maxDepth + " " + w + " " + h);
             System.out.println("===============================================================");
         }
 
+        String filename = "output/scene" + sceneNumber + "_" + maxDepth + "_" + w + "x" + h + ".tga";
         Scene scene = new Scene();
         Vec3 P = new Vec3();
+        double D = 1D;
 
         switch (sceneNumber) {
             case 1:
@@ -43,6 +57,9 @@ public class Main extends JavaTga {
                 P = new Vec3(-2.6, 1.5, 3.9);
                 D = 0.5D;
                 break;
+            default:
+                System.err.println("Invalid scene number");
+                return;
         }
 
         byte buffer[] = new byte[3 * w * h];

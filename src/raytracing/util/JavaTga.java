@@ -1,4 +1,4 @@
-package raytracing.utils;
+package raytracing.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;

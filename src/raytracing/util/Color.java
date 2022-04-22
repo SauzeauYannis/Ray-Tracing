@@ -1,5 +1,10 @@
-package raytracing.utils;
+package raytracing.util;
 
+/**
+ * Class representing a color.
+ * 
+ * @author Yannis Sauzeau
+ */
 public class Color {
 
     public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
@@ -21,34 +26,71 @@ public class Color {
     private float g;
     private float b;
 
+    /**
+     * Constructor.
+     * 
+     * @param r the red component
+     * @param g the green component
+     * @param b the blue component
+     */
     public Color(float r, float g, float b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
+    /**
+     * 
+     * @return the red component
+     */
     public byte getRed() {
         return (byte) (this.r * 255.0f);
     }
 
+    /**
+     * 
+     * @return the green component
+     */
     public byte getGreen() {
         return (byte) (this.g * 255.0f);
     }
 
+    /**
+     * 
+     * @return the blue component
+     */
     public byte getBlue() {
         return (byte) (this.b * 255.0f);
     }
 
-    public Color add(Color color) {
-        return new Color(Math.min(this.r + color.r, 1.0f), Math.min(this.g + color.g, 1.0f), Math.min(this.b + color.b, 1.0f));
+    /**
+     * Add a color to this color.
+     * 
+     * @param c the color to add
+     * @return the resulting color
+     */
+    public Color add(Color c) {
+        return new Color(Math.min(this.r + c.r, 1.0f), Math.min(this.g + c.g, 1.0f), Math.min(this.b + c.b, 1.0f));
     }
 
-    public Color multiply(Color color) {
-        return new Color(this.r * color.r, this.g * color.g, this.b * color.b);
+    /**
+     * Multiply this color by a color.
+     * 
+     * @param c the color to multiply by
+     * @return the resulting color
+     */
+    public Color multiply(Color c) {
+        return new Color(this.r * c.r, this.g * c.g, this.b * c.b);
     }
 
-    public Color multiply(double d) {
-        return new Color(this.r * (float) d, this.g * (float) d, this.b * (float) d);
+    /**
+     * Multiply this color by a scalar.
+     * 
+     * @param s the scalar
+     * @return the resulting color
+     */
+    public Color multiply(double s) {
+        return new Color(this.r * (float) s, this.g * (float) s, this.b * (float) s);
     }
 
 }
