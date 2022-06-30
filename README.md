@@ -57,7 +57,7 @@ Une fois le programme terminé, vous pouvez voir l'image obtenue dans le dossier
 
 ### Résultat
 
-J'ai obtenu la note de ?/20. (Résultat en juin)
+J'ai obtenu la note de 18/20.
 
 <a name="en"/>
 
@@ -106,4 +106,4 @@ Once the program is finished, you can see the obtained image in the 'output' fol
 
 ### Result
 
-I obtained a grade of ?/20. (Result in June)
+I obtained a grade of 18/20.
